@@ -125,11 +125,14 @@ class seno(gr.top_block, Qt.QWidget):
                 100,
                 window.WIN_HAMMING,
                 6.76))
+        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_float*1, samp_rate,True)
         self.blocks_multiply_xx_0_0 = blocks.multiply_vff(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.analog_sig_source_x_0_0_0 = analog.sig_source_f(samp_rate, analog.GR_COS_WAVE, 3000, 1, 0, 0)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(samp_rate, analog.GR_COS_WAVE, 3000, 1, 0, 0)
+        self.analog_sig_source_x_0_0.set_block_alias("Portadora")
         self.analog_sig_source_x_0 = analog.sig_source_f(samp_rate, analog.GR_COS_WAVE, 200, 1, 0, 0)
+        self.analog_sig_source_x_0.set_block_alias("Mensagem (mdulante)")
 
 
         ##################################################
@@ -138,9 +141,10 @@ class seno(gr.top_block, Qt.QWidget):
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.analog_sig_source_x_0_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.analog_sig_source_x_0_0_0, 0), (self.blocks_multiply_xx_0_0, 1))
-        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_xx_0_0, 0))
+        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.blocks_multiply_xx_0_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.blocks_multiply_xx_0_0, 0), (self.qtgui_sink_x_0, 0))
+        self.connect((self.blocks_throttle_0, 0), (self.blocks_multiply_xx_0_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.qtgui_sink_x_0_0, 0))
 
 
@@ -160,6 +164,7 @@ class seno(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_0_0.set_sampling_freq(self.samp_rate)
+        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 300, 100, window.WIN_HAMMING, 6.76))
         self.qtgui_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_sink_x_0_0.set_frequency_range(0, self.samp_rate)
