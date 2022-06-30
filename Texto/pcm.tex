@@ -1,0 +1,369 @@
+\chapter{Modulação por Codificação de Pulsos}
+
+Os sinais podem ser transmitidos de forma analógica ou digital. Nos capítulos anteriores foi vista 
+a transmissão de sinais analógicos. Para que seja possível enviar os sinais no formato digital eles
+devem ser convertidos do formato analógico para o digital, e para que isso seja possível o sinal deve 
+ser amostrado e quantizado, neste capítulo será estudado como essa operação pode ser realizada.
+
+\section{Teorema da Amostragem}
+
+Na Seção~\ref{sec:amostragem} foi mostrado que um sinal $g(t)$ limitado em banda em $B\ Hz$ pode ser reconstruído exatamente de suas amostras se eles foram tomadas uniformemente a uma taxa de $R > 2\ BHz$. Além disso, foi mostrado que uma taxa de amostragem menor que $2B$ produz um efeito conhecido como $aliasing$  que é a sobreposição dos espectros das amostras o que impossibilita a recuperação do sinal original.
+
+Vamos rever o teorema da Amostragem sob outro ângulo. Considere novamente um sinal $g(t)$ cujo espectro é limitado em banda em $B\ Hz$. Para amostrar esse sinal a uma taxa $f_s\ Hz$ pode-se multiplicar $g(t)$ por um trem de impulsos $\delta_{T_s}(t)$, que consiste em um impulso unitário repetido periodicamente a cada $T_s$ segundos ($T_s = 1/f_s$), ou seja
+\[
+ g_s(t) = g(t)\delta_{T_s}(t - nT_s).
+\]
+Como um trem de impulsos é um sinal periódico ele pode ser expresso por uma série de Fourier. A série de Fourier trigonométrica do trem de impulsos é dada por
+\[
+ \delta_{T_s}(t) = \frac{1}{T_s}[1+2\cos\omega_s t + 2\cos 2\omega_s t + 2\cos 3\omega_s t + ...],\ \omega_s = \frac{2\pi}{T_s} = 2\pi f_s
+\]
+dessa forma
+\begin{equation}
+ g_s(t) = g(t)\delta_{T_s}(t) = \frac{1}{T_s}[g(t) + 2g(t)\cos 2\omega_s t + 2g(t)\cos 3\omega_s t + ...]
+\end{equation}
+
+Para encontrar $G_s(\omega)$ podemos aplicar a transformada de Fourier em cada termo da Equação acima. Observe que o primeiro termo é $G(\omega)$, o segundo termo é $G(\omega-\omega_s) + G(\omega+\omega_s)$, o terceiro termo é $G(\omega-2\omega_s) + G(\omega+2\omega_s)$ e assim por diante, e que esses termos são o deslocamento do espectro de $G(\omega)$ para $\pm n\omega_s$, o mesmo que é feito na modulação AM. Isso significa que o espectro de $G_s(\omega)$ consiste de $G(\omega)$ repetido periodicamente com período $\omega_s = 2\pi/T_s$, ou 
+\begin{equation}
+\label{eq:fourieramostra}
+ G_s(\omega) = \frac{1}{T_s}\sum_{n=-\infty}^{\infty}G(\omega- n\omega_s).
+\end{equation}
+como está representado na Figura~\ref{fig:sinalsendoamostrado}
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/sinalsendoamostrado.eps,width=10cm}}
+\caption{\label{fig:sinalsendoamostrado}Representação do sinal $g(t)$, seu espectro $G(\omega)$, do trem de impulsos $\delta_{T_s}(t)$  e do sinal $g_s(t)$ com o seu espectro.}
+\end{figure}
+%*******************
+
+Para reconstruir $g(t)$ a partir de $g_s(t)$ devemos conseguir recuperar $G(\omega)$ de $G_s(\omega)$, isso só será possível se não houver sobreposição dos espectros de $G_s(\omega)$, o que implica em 
+\[
+ f_s>2B\ ou\ T_s < \frac{1}{2B}
+\]
+o valor $f_s = 2B$ é conhecido como {\bf taxa de Nyquist}.
+
+A reconstrução do sinal pode ser feita passando $g_s(t)$ por um filtro passa baixas de largura de banda $B\ Hz$, pois observando a Equação~\ref{eq:fourieramostra} pode-se ver que o sinal $G_s(\omega)$ aplicado a um filtro passa baixas eliminaria as componentes deslocadas de $n\omega_s,\ n\neq 0$, passando somente $G(\omega)$. O filtro com essa característica tem função de transferência
+\begin{equation}
+ H(\omega) = T_s rect\left(\frac{\omega}{4\pi B}\right).
+\label{eq:filtroamostragem}
+\end{equation}
+
+Vamos analisar como a reconstrução do sinal ocorre no domínio do tempo. A resposta ao impulso $h(t)$, cuja função de transferência é dada pela Equação~\ref{eq:filtroamostragem} é
+\[
+ h(t) = 2BT_s sinc(2\pi Bt)
+\]
+e assumindo a taxa de amostragem de Nyquist, isto é, $2BT_s = 1$ temos
+\[
+ h(t) = sinc(2\pi Bt).
+\]
+Observe que $h(t)$ é zero para todos os instantes de amostragem ($t = \pm n/2B$) exceto em $t=0$. Quando $g_s(t)$ é aplicado a esse filtro a saída é $g(t)$ pois como cada amostra em $g_s(t)$ é um impulso na saída do filtro tem-se um pulso $sinc$ cuja amplitude é proporcional a amostra, como está representado na Figura~\ref{fig:interpolacaosinaloamostrado}. De uma forma geral
+\begin{eqnarray}
+ g(t) &=& \sum_{k}g(kT_s)h(t-kT_s) \nonumber \\
+&=& \sum_k g(kT_s)sinc[2\pi B(t-kT_s)] \nonumber \\
+&=& \sum_k g(kT_s)sinc(2\pi Bt-k\pi)
+\end{eqnarray}
+que é conhecida como fórmula de interpolação que aproxima os valores de $g(t)$ a partir das amostas.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/interpolacaosinalamostrado.eps,width=10cm}}
+\caption{\label{fig:interpolacaosinaloamostrado}Representação do sinal $g(t)$, seu espectro $G(\omega)$ e, do trem de impulsos $\delta_{T_s}(t)$  e do sinal $g_s(t)$ com o seu espectro.}
+\end{figure}
+%*******************
+
+Se um sinal é amostrado na frequência de Nyquist $f_s = 1/T_s$ o espectro de $G_s(\omega)$ consiste de repetições do espectro de $G(\omega)$ sem intervalos entre eles, e para recuperar $g(t)$ é necessário utilizar um filtro passa baixas ideal que elimine todas as componentes $G(\omega +n\omega_s)$ sendo $n \neq 0$. Como a realização de um filtro ideal é impossível, ao utilizar um filtro realizável na saída teremos $G(\omega)$ mais uma parte de outras componentes espectrais, fazendo com que o sinal recuperado não seja exatamente $g(t)$. Uma solução para isso é aumentar a frequência de amostragem pois com isso as cópias do espectro de $G(\omega)$ ficarão mais espaçadas e pode-se utilizar filtros mais suaves. Mesmo assim, nem sempre pode-se obter um filtro que elimine somente $G(\omega)$ ou realizar uma amostragem em taxas mais altas, logo conclui-se que a recuperação exata de $g(t)$ a partir de suas amostras é muito difícil.
+
+O teorema da amostragem foi demonstrado considerando que o sinal $g(t)$ é limitado em banda, porém os sinais práticos são naturalmente ilimitados em banda, dessa forma, o espectro $G_s(\omega)$ do sinal amostrado consistirá de ciclos de $G(\omega)$ que se sobrepõem a cada $f_s\ Hz$. Devido a essa sobreposição $G_s(\omega)$ não tem a informação completa sobre $G(\omega)$, logo teoricamente não seria possível recuperar $g(t)$ de $g_s(t)$. Este problema é conhecido como {\em aliasing}.
+
+Uma possibilidade para solucionar o problema do {\em aliasing} é filtrar o sinal $g(t)$ antes que ele seja amostrado. Essa filtragem conhecida como {\em anti-aliasing} deve eliminar as componentes de frequências mais altas do sinal.
+
+Outra dificuldade é que o teorema foi demonstrado utilizando uma sequência de impulsos para amostrar o sinal $g(t)$, e como é sabido os impulsos também são fisicamente irrealizáveis. Entretanto, pode-se utilizar um trem de pulsos para obter as amostras de $g(t)$, desde que a frequência de Nyquist seja preservada. Para tanto, observe que um trem de pulsos sendo um sinal periódico pode ser expresso como
+\[
+ p_{T_s}(t) = C_0 + \sum_{n=1}^{\infty}C_n\cos(n\omega_s t + \theta_n),\  \omega_s = \frac{2\pi}{T_s}
+\]
+e
+\begin{eqnarray}
+ g_s(t) &=& g(t)p_{T_s}(t) = g(t)\left[C_0 + \sum_{n=1}^{\infty}C_n\cos(n\omega_s t + \theta_n)\right] \nonumber \\
+&=& C_0g(t) + \sum_{n=1}^{\infty}C_ng(t)\cos(n\omega_s t + \theta_n)
+\end{eqnarray}
+e o sinal amostrado $g_s(t)$ consiste de $C_0 g(t)$, $C_1g(t)\cos(\omega_s t+\theta_1)$, $C_2g(t)\cos(2\omega_s t+\theta_1)$ e assim por diante. O termo desejado é $c_0g(t)$ e os demais estão deslocados de $n\omega_s$ logo podem ser eliminados pelo filtro.
+
+%\subsubsection*{Máxima Taxa de Informação}
+
+%Um canal de comunicações de largura de Banda $B\ Hz$ sem ruído pode transmitir um sinal de largura de banda de $B\ Hz$ sem erro. Como foi visto, um sinal de largura de banda de $B\ Hz$ pode ser reconstruído a partir de suas amostras tomadas a uma taxa de $2B\ Hz$. Em outras palavras, um sinal de largura de banda de $B\ Hz$ pode ser completamente espcificado por $2B$ pedaços de informação por segundo. Como o canal não tem erro, pode-se dizer que ele consegue transmitir $2B$ pedaços de informação independentes por segundo, em outras palavras, pode-se transmitir sem erro dois pedaços de informação por segundo por hertz de largura de banda. Esta é uma das relações fundamentais em telecomunicações.
+
+\subsubsection{Aplicações}
+
+O teorema da amostragem é muito importante na análise, processamento e transmissão de sinais pois permite substituir um sinal contínuo no tempo por uma sequência de números discretos. Esse fato abre a possibilidade de realizar o processamento digital do sinal e de construir novas técnicas para comunicar sinais contínuos no tempo por trem de pulsos. Nesse último caso, as amostras do sinal são utilizadas para modificar certos parâmetros de um trem de pulsos periódicos. Pode-se variar a amplitude dos pulsos, obtendo a modulação conhecida como {\bf modulação por amplitude de pulsos} (PAM - {\em pulse-amplitude modulation}, a largura dos pulsos obtendo-se a {\bf modulação por largura de pulso} (PWM - {\em pulse-width modulation}) ou a posição do pulso obtendo a {\bf modulação por posição do pulso} (PPM - {\em pulse-position modulation}) ou ainda a {\bf modulação por codificação do pulso} (PCM - {\em pulse-code modulation}). As três primeiras estão representadas na Figura~\ref{fig:modulacaopulsos} e a última será tratada na próxima seção.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/modulacaopulsos.eps,width=6cm}}
+\caption{\label{fig:modulacaopulsos}Representação das modulações por pulso a) Sinail $g(t)$, b) Portadora de Pulsos, c) PAM, d) PWM e e) PPM.}
+\end{figure}
+%*******************
+
+Como exemplo vamos analisar o PAM. Nessa modulação, as amplitudes dos pulsos regularmente espaçados variam proporcionalmente aos valores das amostras de um sinal mensagem contínuo, os pulsos podem ter formato retangular, como está representado na Figura~\ref{fig:modulacaopulsos} c) ou alguma outra forma apropriada. 
+
+Na Figura~\ref{fig:modulacaopulsos} pode-se observar o sinal mensagem $m(t)$ e a sequência de pulsos retangulares $s(t)$. A geração do sinal PAM envolve duas operações:
+\begin{enumerate}
+ \item Amostragem do sinal $m(t)$ a cada $T_s$ (período de amostragem) segundos.
+ \item Prolongamento da duração de cada amostra até um valor constante $T$.
+\end{enumerate}
+
+Na terminologia de circuitos as operações acima são conhecidas como {\em sample and hold} e a relação $T/T_s$ como ciclo de trabalho. A razão para prolongar a duração de cada amostra é evitar o uso de uma largura de banda excessiva, uma vez que a largura de banda é inversamente proporcional à duração do pulso.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/modulacaopam.eps,width=6cm}}
+\caption{\label{fig:modulacaopam}Sinal m(t) modulando em amplitude um pulso quadrado de duração T.}
+\end{figure}
+%*******************
+
+Um sinal PAM $s(t)$ pode ser definido como
+\[
+ s(t) = \sum_{n=-\infty}^{\infty}m(nT_s)h(t - nT_s)
+\]
+sendo $T_s$ o período de amostragem, $m(nT_s)$ o valor da amostra de $m(t)$ obtido no tempo $t = nT_s$ e $h(t)$ um pulso retangular de amplitude unitária e duração $T$, definido da seguinte maneira:
+\[
+ h(t) =
+\left\{
+\begin{array}{c c}
+ 1, & 0<t<T \\
+\frac{1}{2}, & t=0,\ t=T \\
+0,& c.c.
+\end{array}
+\right.
+\]
+
+Por definição, a versão amostrada instantaneamente de $m(t)$ é dada por
+\begin{equation}
+ m_{\delta} = \sum_{n=-\infty}^{\infty}m(nT_s)\delta(t - nT_s)
+\end{equation}
+sendo $\delta(t-nT_s)$ uma função delta deslocada no tempo. Portanto, convoluindo $m_{\delta}$ com o pulso $h(t)$, tem-se
+\begin{eqnarray}
+ m_{\delta}(t)*h(t) &=& \int_{-\infty}^{\infty}m_{\delta}(\tau)h(t-\tau)d\tau \nonumber \\
+&=& \int_{-\infty}^{\infty} \sum_{n=-\infty}^{\infty} m_{\delta}(nT_s)\delta(\tau-nT_s)h(t-\tau)d\tau \\
+&=& \sum_{n=-\infty}^{\infty} m_{\delta}(nT_s)\int_{-\infty}^{\infty}\delta(\tau-nT_s)h(t-\tau)d\tau \\
+\end{eqnarray}
+usando a propriedade da função delta temos
+\[
+ m_{\delta}(t)*h(t) = \sum_{n=-\infty}^{\infty}m(nT_s)h(t-nT_s)
+\]
+Portanto tem-se que o sinal $s(t)$ é matematicamente equivalente à convolução de $m_{\delta}(t)$ com o pulso $h(t)$, e pelas propriedades da transformada de Fourier tem-se
+\[
+ S(\omega) = M_\delta(\omega)H(\omega)
+\]
+e como 
+\[
+ M_\delta(\omega) = f_s\sum_{k=-\infty}^{\infty}M(\omega-k\omega_s)
+\]
+tem-se 
+\begin{equation}
+ S(\omega) = f_s\sum_{k=-\infty}^{\infty}M(\omega-k\omega_s)H(\omega)
+\label{eq:PAMespectro}
+\end{equation}
+
+\begin{exercicio}
+ Analise a influência da largura do pulso $T$ no espectro $S(\omega)$ na Equação~\ref{eq:PAMespectro}
+\end{exercicio}
+
+\section{Modulação por Codificação de Pulsos}
+
+Conhecida como PCM, do inglês {\em Pulse-Code Modulation} é a modulação em pulso mais utilizada. Basicamente, PCM é um método de converter um sinal analógico em um sinal digital (conversão A/D). Para isso utiliza-se a amostragem e a quantização, isto é, uma aproximação dos valores das amostras para níveis pré-definidos. Considerando que as amplitudes do sinal analógico $m(t)$ variam no intervalo $(-m_p, m_p)$, esse espaço é particionado em $L$ sub-intervalos, cada um de tamanho $\Delta v = 2m_p/L$, em seguida cada amostra é aproximada para um dos $L$ pontos que esteja mais próximo. O sinal obtido é chamado de digital.
+
+Como exemplo observe a Figura~\ref{fig:senoidequantizada}, nela uma senóide de fequência $F_c$ é amostrada com uma freuqência $f_s \geq 2f_c$ em seguida são realizada duas quantizações distintas, um com  $L = 2$ e outra $L=4$ níveis. Observe que para $L=2$ a senóide é apromimada por um sinal quadrado, e com $L = 4$ mesmo não sendo uma aproximação exata já tem-se um formato de senóide.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/senoidequantizada.eps,width=10cm}}
+\caption{\label{fig:senoidequantizada}Senóide amostrada e em seguida quantizada com $L=2$ níveis e com $L=4$ níveis.}
+\end{figure}
+%*******************
+
+O processo seguinte é associar a cada um do $L$ níveis um conjunto de bits. Se para cada nível for associada a sua representação em binário tem-se o código natural binário (NBC, do inglês {\em natural bunary code}).
+
+Como exemplo um sinal de áudio tem largura de banda de 15KHz, mas mostra-se que a intelegibilidade não é afetada se esse sinal for filtrado em 3400Hz e o sinal resultante é amostrado a 8000 amostras por segundo (8 KHz), maior que a taxa de Nyquist que seria de 6,8KHz, e cada amostra é quantizada em 256 níveis ($L=256$) que necessitam de um grupo de oito bits para cada amostra, assim um sistema telefônico necessita de $8\times 8000 = 64000$ pulsos binários por segundo.
+
+O CD ({\em compact disk}) o sinal de som não é filtrado e é utilizada uma taxa de amostragem de 44.1KHz, maior que o 30KHz necessários, e o sinal é quantizado em $L = 65.536$ níveis para reduzir o erro de quantização. No DVD a taxa de amostragem pode chegar a 192KHz e cada amostra pode usar 24 bits podendo o sinal ser quantizado a $L= 16.777.216$ níveis.
+
+\subsection{Quantização}
+
+A quantização consiste em aproximar os valores das amostras para níveis pré-definidos. Para isso vamos limitar a amplitude do sinal mensagem $m(t)$ para o intervalo ($-m_p$, $m_p$), caso o pico de amplitide de $m(t)$ seja maior que $m_p$ os valores acima serão fixados em $m_p$. Assim $m_p$ não é um parâmetro do sinal mais do quantizador, em seguida divide-se o intervalo ($-m_p$, $m_p$) em $L$ subintervalos, cada um com $\Delta v = 2m_p/L$ e os valores amostrados são aproximados para o valor do intervalo que ele pertence. As amostras quantizadas são codificadas em seguida transmitidas por pulsos binários. 
+No receptor tenta-se recuperar o sinal transmitido a partir das amostras.
+
+Se $m(kT_s)$ é a $k$-ésima amostra do sinal $m(t)$, e $\hat{m}(kT_s)$ é a amostra quantizada correspondente, então da fórmula de interpolação tem-se que
+\[
+ m(t) = \sum_{k}m(kT_s)sinc (2\pi Bt - k\pi)
+\]
+e
+\[
+ \hat{m}(t) = \sum_{k}\hat{m}(kT_s)sinc (2\pi Bt - k\pi)
+\]
+sendo $\hat{m}(t)$ o sinal reconstruído das amostras quantizadas. A componente de distorção no sinal reconstruído é dada por
+\begin{eqnarray}
+ q(t) &=& \hat{m} - m(t) \nonumber \\
+&=& \sum_{k}[\hat{m}(kT_s) - m(kTs)]sinc (2\pi Bt - k\pi) \nonumber \\
+&=& \sum_{k}q(kT_s)sinc (2\pi Bt - k\pi)
+\end{eqnarray}
+sendo $q(kT_s)$ o erro de quantização na $k$-ésima amostra. O sinal $q(t)$ é indesejado logo é chamado de {\bf erro de quantização}. Uma medida importante é a potência do erro de quantização, ou seja
+\begin{eqnarray}
+ \overline{q^2(t)} &=& \lim_{T\leftarrow \infty}\frac{1}{T}\int_{-T/2}^{T/2}q^2(t)dt \nonumber \\
+&=& \lim_{T\leftarrow \infty}\frac{1}{T}\int_{-T/2}^{T/2}\left[\sum_{k}q(kT_s)sinc(2\pi B - k\pi)\right]^2 dt
+\end{eqnarray}
+sabendo que os sinais $sinc(2\pi Bt -m\pi)$ e $isnc(2\pi B t -n\pi)$ são ortogonais tem-se
+\begin{eqnarray}
+ \overline{q^2(t)} &=& \lim_{T\leftarrow \infty}\frac{1}{T}\int_{-T/2}^{T/2}q^2(t)dt \nonumber \\
+\end{eqnarray}
+
+Os níveis de quantização são separados por $\Delta v = 2m_p/L$ e como o erro de quantização ocorre dentro de um desses intervalos, esse erro está entre $(-\Delta v/2, \Delta v/2)$. Assumindo que o erro é equiprovável em qualquer dos intervalos, tem-se
+\begin{eqnarray}
+ \overline{q^2(t)} &=& \frac{1}{\Delta v}\int_{-\Delta v/2}^{\Delta v/2}q^2(t)dt \nonumber \\
+&=& \frac{(\Delta v)^2}{12} \nonumber \\
+&=& \frac{m_p^2}{3L^2}.
+\end{eqnarray}
+
+Assumindo que o erro de detecção do pulso no receptor é desprezível, o sinal $\hat{m}(t)$ pode ser escrito como
+\[
+ \hat{m}(t) = m(t) + q(t)
+\]
+Considerando a potência do sinal mensagem como $\hat{m^2(t)}$ pode-se definir uma relação sinal ruído como
+\begin{eqnarray}
+ \frac{S}{N} = 3L^2\frac{\hat{m^2(t)}}{m_p^2}
+\end{eqnarray}
+e como $m_p$ é a amplitude do sinal que o quantizador aceita e é um parâmetro do quantizador, quanto maior esse valor menor a relação sinal ruído.
+
+
+\section{Quantização não Uniforme}
+
+Os intervalos de quantização sendo uniformes $\Delta v = 2m_p/L$ trazem um problema, como o ruído de quantização $N_q = (\Delta v)^2/12$ é proporcional a $\Delta v$ se pudermos usar intervalos de quantização menor diminuiremos o ruído. Isso é feito usando intervalos menores para amplitudes menores do sinal de entrada e é conhecido como quantização não uniforme.
+
+Pode-se realizar a quantização não uniforme de diversas maneiras, uma delas é conhecida como lei $\mu$ utilizada no sistema de telefonia norte americano e japonês e o outro é conhecido como lei A usado no sistema europeu, brasileiro e no resto do mundo. A lei $\mu$ para amplitudes positivas é dada por
+\[
+ y = \frac{1}{ln(1+\mu)}ln\left(1+\frac{\mu m}{m_p}\right),\ \ 0\leq\frac{m}{m_p}\leq 1
+\]
+A lei A para amplitudes positivas é dada por
+\[
+ y = \left\{
+\begin{array}{c c}
+\frac{A}{1+ln A}\left(\frac{m}{m_p}\right) & 0\leq \frac{m}{m_p} \leq \frac{1}{A} \\
+\frac{A}{1+ln A}\left(\frac{Am}{m_p}\right) & \frac{1}{A}\leq \frac{m}{m_p} \leq 1 \\
+\end{array}
+\right.
+\]
+Os parâmetro $\mu$ ou $A$ determinam o grau de compressão.
+
+No receptor as amostras devem ser restauradas para o seu valor original e para isso usa-se um expansor com uma característica complementar a do compressor.
+
+\subsection{Largura de banda}
+
+Em PCM associa-se um grupo de $n$ bits a cada um do $L$ níveis de quantização, ou seja,
+\[
+ L = 2^n\ \ ou\ \ n = \log_2 L.
+\]
+Como o sinal $m(t)$ limitado em $B$ Hz requer no mínimo $2B$ amostras por segundo, necessita-se de $2nB$ bits por segundo.Sabendo que uma largura de banda de 1Hz pode transmitir no máximo duas peças de informação por segundo, necessita-se de
+\[
+ B_T = nB Hz
+\]
+de largura de banda para transmitir um sinal PCM.
+
+\section{Multiplexação por Divisão no Tempo}
+
+Um sinal amostrado terá valor zero entre as amostras, os intervalos de tempo entre as amostras podem ser usados para transmitir outros sinais, esse é o princípio da multiplexação por divisão no tempo (TDM, do inglês {\em Time Division Multiplexing}).
+
+Um esquema TDM simples pode ser visto na Figura~\ref{fig:tdm}. Várias entradas são pré-filtradas pelos filtros passa baixas e em seguida são amostradas. O amostrador rotatório ou comutador extrai uma amostra de cada entrada por volta e essa amostras podem ser enviadas por um PAM. No receptor, um equipamento chamado de distribuidor irá entrega cada amostra a uma saída para que em seguida os sinais sejam reconstruídos.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/tdm.eps,width=8cm}}
+\caption{\label{fig:tdm}Representação de um sistema TDM.}
+\end{figure}
+%*******************
+
+Se todas as entrada tem a mesma largura de banda $B$, o comutador deve girar a uma taxa $f_s \geq 2B$ de tal sorte que as amostras sucessivas de qualquer uma das entradas é espaçada de $T_s = 1/f_s$. O intervalo $T_s$ contém uma amostra de cada entrada e é chamado de quadro. Se existem $M$ canais de entrada, o espaço de um pulso deve ser $T_s/M$, então o número total de pulsos por segundos é
+\[
+ r = Mf_s \geq 2MB
+\]
+que representa a taxa de sinalização de um sinal TDM.
+
+\subsection{Sistemas de Modulação Digital}
+
+Vimos em capítulos anteriores que um sinal pode ser transmitido usando a modulação AM ou em ângulo. Naquele momento, o sinal mensagem $m(t)$ era analógico. Agora que já sabemos como digitalizar um sinal vamos analisar como são realizadas as modulações com sinais mensagens digitais.
+
+Os sinais digitais são representados por sequências de zero e uns, se representarmos o zero como ausência de sinal e um como presença de sinal e usarmos o sinal resultante para modular uma portadora em amplitude teremos que, quando um zero tiver que ser transmitido a presença da portadora e quando for o bit um a presença da portadora, como está ilustrado na Figura~\ref{fig:ook}. Esse tipo de modulação é chamado de chaveamente liga-desliga (OOK, do inglês {\em on-off keying}) ou ainda como chaveamento de amplitude (ASK, do inglês {\em amplitude-shift keying}.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/ook.eps,width=8cm}}
+\caption{\label{fig:ook}Modulação ASK.}
+\end{figure}
+%*******************
+
+Caso a representação seja polar, um é representado pelo pulso $p(t)$  e zero por $-p(t)$ (ou vice-versa) o sinal modulado em amplitude terá o formato mostrado na Figura~\ref{fig:fsk} e será chamado de PSK - {\em phase-shift keying}. Quando os dados são enviados por variações de frequência temos a modulação FSK - {\em frequncy-shit keying}.
+
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/fsk.eps,width=8cm}}
+\caption{\label{fig:fsk}Modulações PSK e FSK.}
+\end{figure}
+%*******************
+
+Qualquer sinal modulado por um pulso em banda básica digital pode ser escrito como
+\[
+ S(t) = A[x_i(t)\cos(\omega_c t + \theta) = x_q(t)\sin(\omega_c t + \theta)]
+\]
+sendo $f_c$ a frequência da portadora, $A$ a amplitude e $\theta$ a fase todos constantes. $x_i(t)$ e $x_q(t)$ são as componentes em fase e quadratura que contêm a mensagem. Considerando $x_i(t)$ e $x_q(t)$ estatisticamente independentes e ao menos uma com médio zero, tem-se que espectro desse sinal é dado por
+\[
+ S(\omega) = \frac{A^2}{4}[G_i(\omega-\omega_c)+G_i(\omega-\omega_c)+G_q(\omega-\omega_c)+G_q(\omega+\omega_c)]
+\]
+sendo $G_i$ e $G_q$ os espectros de potência das componentes $i$ e $q$ respectivamente.
+
+Suponha que a componente $i$ de um sinal $M$-ário digital é dada por
+\[
+ x_i(t) = \sum_k a_k p(t-kD)
+\]
+sendo $a_k$ a sequência de dígitos da fonte gerados com uma taxa $r=1/D$. Assumindo que os dígitos da fonte são equiprováveis,
+estatisticamente independentes e descorrelacionados tem-se que
+\[
+ G_i(\omega) = \sigma_a^2 r\mid P(\omega)\mid^2 + (m_a r)^2\sum_{n=-\infty}^{\infty}\mid P(nr)\mid^2\delta(\omega-nr)
+\]
+sendo $\sigma_a$ e $m_a$ a média e a variância dos símbolos.
+
+Considerando $p(t)$ um pulso quadrado tem-se que
+\[
+ \mid P(\omega) \mid^2 = \frac{1}{r^2}sinc^2\frac{\omega}{r}.
+\]
+
+Vamos considerar inicialmente uma sinal $M$-ário ASK, que contém $M-1$ amplitudes discretas e uma amplitude zero. Como nesse sinal não existe reversão da fase ou outras variações, pode-se fazer a componente $q$ igual a zero e a componente $i$ como
+\[
+x_i(t) = \sum_k a_k p(t-kD),\ \ a_k = 0,1, ..., M-1
+\]
+e a média e variância da sequência digital sendo
+\[
+ m_a = \frac{M-1}{2}\ \ e\ \ \sigma_a^2 = \frac{M^2-1}{2}
+\]
+de onde tem-se que
+\[
+ S(\omega) = \frac{M^2-1}{12 r}sinc^2\frac{f}{r} + \frac{(M-1)^2}{4}\delta(\omega)
+\]
+
+O espectro $S(\omega)$ da equação acima não é limitado em banda, porém contém maioria da potência na faixa $\omega_c \pm 2\pi r/2$ e outra parte da energia que cai inversamente proporcional a $\mid \omega - \omega_c\mid^2$, sugerindo que a largura de banda desses sinais é aproximadamente $B_T \approx r$.
+
+
+
+Outra forma de enviar é usar a modualação em quadratura de amplitude (QAM - {\em quadrature amplitude modulation}) que pode ser obtida transmitido os sinais em fase e quadratura, ou seja se fizermos
+\begin{eqnarray}
+ p_i(t) &=& a_i p(t)\cos\omega_c t + b_ip(t)\sin\omega_c t \nonumber \\
+&=& r_i p(t)\cos(\omega_c t - \theta_i), \ \ i=1, 2, 3..., 16
+\end{eqnarray}
+sendo
+\[
+ r_i = \sqrt{a_i^2 + b_i^2}\ e\ \theta_i = tan^{-1}\frac{b_i}{a_i}
+\]
+
+%FIGURA
+
+%\section{PCM Diferencial}
+
+%\section{Modulação Delta}

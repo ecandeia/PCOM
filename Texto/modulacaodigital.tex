@@ -1,0 +1,238 @@
+\chapter{Modulação Digital}
+
+
+\section*{Modulação em Fase}
+
+A informação é enviada pela mudança de fase da portadora. Como a fase varia entre $0 \leq \theta \leq 2\pi$, se quisermos enviar $M$ informações distintas, nesse caso enviaremos $k = \log_2 M$ bits, serão usadas as fases $\theta_m = 2\pi m/M$, para $m=0,1,..., M-1$. Como exemplo seja $M=2$, nese caso temos $\theta_0 = 0$ e $\theta_1 = \pi$. 
+
+A representação geral para uma modulação em fase $M$-ária é dada por
+\[
+s_m(t) = A g_T(t) \cos\left(\omega_c t + \frac{2\pi m}{M}\right)
+\]
+$m=0, 1, ..., M-1$, $g_T(t)$ o pulso cujo formato é escolhido para determinar as características espectrais do sinal enviado e $A$ é a amplitude do sinal enviado.
+Esse tipo de modulação é chamado de {\bf PSK - {\em Phase Shift Keying}}.
+
+Quando $g_T$ é um pulso retangular, definido por
+\[
+g_T(t) = \sqrt{2}{T},\ \ 0\leq t\ leq T
+\]
+e fazemos $A = \sqrt{E_s}$ temos
+\[
+s_m(t) = \sqrt{2E_s}{T} \cos\left(\omega_c t + \frac{2\pi m}{M}\right)
+\]
+Na Figura abaixo temos os sinais PSK para $M=4$ 
+
+Vamos considerar esquemas de modulação cujo sinal mensagem é digital, denominadas a partir desse ponto de modulação digital. Nesse esquemas, a inormação gerada pelo transmissor será amostrado na frequência de Nyquist, quantizada e seguida convertida para sua repesentação binária, portanto a partir desse capítulo será considerado que o modulador recebe a sequência de bits a ser transmitida e realiza a modulação de uma portadora com esses bits.
+
+%Existem dois tipos básicos de modulação: amplitude e em ângulo. Como a mensagem é binária, se fizermos modulação em amplitude
+
+Qualquer sinal modulado pode ser escrito no formato fase e quadratura da seguinte forma
+\[
+s(t) = A_c[x_i(t)\cos(2\pi f_c t+ \theta) + x_q(t)\sin(2\pi f_c t + \theta)]
+\]
+sendo $A_c$, $f_c$ e $\theta$ constantes, $x_i(t)$ e $x_q(t)$ componentes que contêm a mensagem. Considerando $x_i(t)$ e $x_q(t)$ estatisticamente independentes e ao menos um deles com média zero tem-se
+\[
+S(f) = \frac{A_{c}^{2}}{4}[X_i(f - f_c) + X_i(f+f_c) + X_q(f-f_c) + X_q(f+f_c)].
+\]
+Para uma representação mais compacta, vamos definir uma representação passa baixa como
+\[
+X_{pb} = X_i(f) + X_q(f)
+\]
+e então
+\[
+S(f) = \frac{A^2}{4}\left[X_{pb}(f-f_c)+X_{pb}(f+f_c)\right]
+\]
+
+Entretanto, $x_i(t) = \sum_{k} a_k p(t-kD)$ sendo $a_k$ a sequência de dígitos da fonte gerada com taxa $r = 1/D$ e dai tem-se que 
+\[
+X_i(f) = \sigma_{a}^2 r\mid P(f)\mid^2 + (m_a r)^2\sum_{n=-\infty}^{\infty}\mid P(nr)\mid^2\delta(f-nr)
+\]
+sendo $m_a$ e $\sigma_a^2$ a média e a variância de $a_k$. A mesma expressão vale para $X_q(f)$.
+
+Considerando $p(t)$ como um pulso retangular tem-se que
+\[
+\mid P(f)\mid^2 = D^2 sinc^2 fD = \frac{1}{r^2}sinc^2\frac{f}{r}
+\]
+
+\section{Modulações em Amplitude}
+
+Considerando inicialmente a modulação em amplitude, se fizermos o bit zero como o ausência de sinal e o bit 1 como o pulso $p(t)$ temos a modulação OOK ({\em On-Off Keying}), também conhecida como ASK - {\em Amplitude Shift Keying}, e a componente $x_q(t)$ pode ser feita igual a zero pois não haverá inversão de fase. Assim
+\[
+x_i(t) = \sum_k a_kp(t-kD),\ \ a_k = 0,1,...,M-1
+\]
+para um sinal $M$-ário que tem média e variância dados por
+\[
+m_a = \frac{M-1}{2}\ e\ \sigma_{a}^2 = \frac{M^2-1}{12}
+\]
+e assim
+\begin{eqnarray}
+S(f) &=& \frac{A_{c}^{2}}{4}\left[\frac{(M^2 -1)}{12r} sinc^2 \frac{(f-f_c)}{r} 
+ + \frac{(M-1)^2}{4}\delta(f-f_c) \right. \nonumber \\
+&+& \left. \frac{(M^2 -1)}{12r} sinc^2 \frac{(f+f_c)}{r} + \frac{(M-1)^2}{4}\delta(f+f_c)\right]
+\end{eqnarray}
+
+\begin{exemplo} Fazendo $M=2$ (binário), $A_c = 4$, $f_c = 5$ temos
+na Figura~\ref{fig:asktempo} a representação do sinal OOK no tempo para a sequência $\{1,0,1,0,1,0,1,0,1,0\}$
+%%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=asktempo.eps,width=8cm}}
+\caption{\label{fig:asktempo}Sinal OOK.}
+\end{figure}
+%%*******************
+e
+\begin{eqnarray}
+S(f) = \left[\frac{1}{r} sinc^2 \frac{(f-5)}{r} + \delta(f-5)
++ \frac{1}{r} sinc^2 \frac{(f+5)}{r} + \delta(f+5)\right]
+\end{eqnarray}
+e na Figura~\ref{fig:ookEspectro} a parte positiva do espectro do sinal OOK para $r = 1$ e $r = 5$. Observe que o impulso não foi representado nessa figura, mas que a largura de banda do sinal aumenta a medida que $r$ aumenta (ou $D$ diminui), o que é esperado pois nesse caso a taxa de transmissão aumenta.
+
+Além disso, observe que a maior parte da energia está concentrada a uma distância de $r$ Hz da frequência da portadora.
+\end{exemplo}
+
+%%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=ookEspectro.eps,width=8cm}}
+\caption{\label{fig:ookEspectro}Parte positiva do espectro de um sinal OOK para $r=1$ r $r=5$ sem mostrar o impulso em $f_c$.}
+\end{figure}
+%%*******************
+
+%Vamos agora considerar um sinal QAM fazendo
+%\[
+%x_i(t) = \sum_k a_{2k}p(t-kD)\ \ e \ \ 
+%x_q(t) = \sum_k a_{2k+1}p(t-kD)
+%\]
+%e com isso poderemos transmitir dois bits de cada vez, um em fase e outro em quadratura, e teremos $D=1/r = 2T_b$. Se fizermos $a_k = \pm 1$ teremos %$m_a = 0$ e $\sigma^{2}_{a} = 1$ e
+%\[
+%\mid P(f) \mid^2 = \frac{4}{r_b} sinc^2 \frac{2f}{r_b}
+%\]
+%e finalmente
+%\[
+%S(f) = \frac{A_{c}^{2}}{4}
+%\]
+
+\section{Modulação em fase}
+
+Um sinal modulado em fase por uma informação digital será chamado de PSK - {\em Phase Shift Keying}. Um sinal PSK $M$-ário tem deslocamento de fase $\phi_k$ no intervalo de tempo $kD<t<(k+1)D$ e pode ser expresso por
+\[
+s(t) = A_c\sum_k \cos(\omega_c t + \theta + \phi_k)p(t-kD)
+\]
+e as componentes em quadratura e fase podem ser expressas por
+\[
+x_i(t) = \sum_k I_kp(t-kD)\ \ e\ \ x_q(t) = \sum_k Q_kp(t-kD)
+\]
+sendo 
+\[
+I_k = cos\phi_k\ \ e\ \ Q_k = \sin\phi_k
+\]
+e a relação entre $a_k$ e $\phi_k$ é dada por
+\[
+\phi_k = \frac{\pi(2a_k + N)}{M},\ \ a_k=0,1,...,M-1
+\]
+sendo $N$ um valor inteiro, usualmente 0 ou 1.
+
+Pode-se mostrar que 
+\[
+\overline{I}_k = \overline{Q}_k = 0,\ \ \overline{I^2}_k = \overline{Q^2}_k = 1/2\ e\ \ \overline{I_kQ_j} = 0
+\]
+
+Como as componentes em fase e quadratura são estatisticamente independentes tem-se
+\[
+S_{pb}(f) = 2\frac{r}{2}\mid P(f)\mid^2 = \frac{1}{r} sinc^2\frac{f}{r}
+\]
+e
+\[
+S(f) = \frac{A^2}{4}\left[\frac{1}{r} sinc^2\frac{(f-f_c)}{r}+\frac{1}{r} sinc^2\frac{(f+f_c)}{r}\right].
+\]
+
+Observe na expressão acima que não existe o impulso, logo PSK é mais eficiente do que ASK.
+
+\begin{exemplo} Vamos repetir o exemplo anterior para PSK fazendo $M=2$ (binário), $A_c = 4$, $f_c = 5$ e $N=1$, daí temos
+\begin{eqnarray}
+S(f) = \frac{1}{r}\left[ sinc^2 \frac{(f-5)}{r} 
++  sinc^2 \frac{(f+5)}{r} \right]
+\end{eqnarray}
+e na Figura~\ref{fig:ookEspectro} a parte positiva do espectro do sinal PSK para $r = 1$ e $r = 5$. Observe que o espectro obtido é similar ao da ASK porém sem o impulso, o que indica que PSK é mais eficiente do que ASK.
+
+Além disso, observe que a maior parte da energia está concentrada a uma distância de $r$ Hz da frequência da portadora.
+\end{exemplo}
+
+%%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=bpsk.eps,width=8cm}}
+\caption{\label{fig:ookEspectro}Parte positiva do espectro de um sinal BPSK para $r=1$ r $r=5$.}
+\end{figure}
+%%*******************
+
+\section{Modulação em Frequência}
+
+Aqui teremos a modulacão conhecida como FSK - {\em Frequency Shift Keying} que terá frequência
+\[
+f_k = f_c + f_d a_k, \ \ a_k = \pm 1, \pm 3, ...., \pm(M-1)
+\]
+onde assume-se que $M$ á par. Assim,
+\[
+s(t) = A_c\sum_k\cos(\omega_c t + \theta + \omega_d a_k t)p(t-kD)
+\]
+
+Vamos fazer $M=2$, $D=T_b=1/r_b$, $N=1$ e $f_d = r_b/2$. Sendo $p(t) = u(t) = u(t-kT_b)$ te-se
+\[
+f_d = r_2/2.
+\]
+Fazendo $a_k = \pm 1$ teremos
+\[
+\cos\omega_d a_k t = \cos\omega_d t \ \ \ \sin\omega_d a_k t = a_k\sin\omega_d t
+\]
+a componente em fase se reduz a 
+\[
+x_i(t) = \cos\pi r_b t
+\]
+a componente em quadratura será dada por
+\begin{eqnarray}
+x_q(t) &=& \sum a_k\sin(\pi r_b t)p(t-kD) \nonumber \\
+&=& \sum a_k\sin(\pi r_b t)[u(t-kT_b) - u(t-kT_b-T_b)]
+\end{eqnarray}
+fazendo
+\[
+Q_k = (-1)^k a_k
+\]
+e
+\[
+p_1(t) = \sin(\pi r_b t)[u(t) - u(t - T_b)]
+\]
+tem-se 
+\[
+x_q(t) = \sum_k Q_kp(t-kTb).
+\]
+ A componente em fase só contribui com impulsos em $r_b/2$ e daí
+\begin{eqnarray}
+S(f) &=& \frac{A_c^2}{4}\left[\frac{1}{4}\left[\delta(f-f_c -\frac{r_b}{2})+\delta(f-f_c +\frac{r_b}{2})\right] - r_b\mid P(f-f_c)\mid^2 \right. \nonumber \\
+&+& \left.\frac{1}{4}\left[\delta(f+f_c -\frac{r_b}{2})+\delta(f+f_c +\frac{r_b}{2})\right] - r_b\mid P(f+f_c)\mid^2\right]
+\end{eqnarray}
+e
+\[
+\mid P(f)\mid^2 =\frac{1}{4*r_{b}^2}\left[sinc\frac{f-r_b/2}{r_b} + sinc\frac{f + r_b/2}{r_b}\right]^2%\frac{4}{\pi^2 r_b^2}\left[\frac{\cos(\pi f/r_b)}{(2f/r_b)^2 -1)}\right]^2
+\]
+
+\begin{exemplo} Reteprindo os exemplo anteriores, fazendo $M=2$ (binário), $A_c = 4$, $f_c = 5$ e $N=1$, temos
+%\begin{eqnarray}
+%S(f) = \frac{1}{r}\left[ sinc^2 \frac{(f-5)}{r} 
+%+  sinc^2 \frac{(f+5)}{r} \right]
+%\end{eqnarray}
+na Figura~\ref{fig:fskspectro} a parte positiva do espectro do sinal PSK para $r = 1$ e $r = 5$. 
+\end{exemplo}
+
+%%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=fskespectro.eps,width=8cm}}
+\caption{\label{fig:fskspectro}Parte positiva do espectro de um sinal FSK para $r=1$ r $r=5$ sem mostrar os impulsos.}
+\end{figure}
+%%*******************
+
+Na Figura~\ref{fig:pskfskspectro} tem o espectro do PSK e do FSK. Observe que FSK apesar de ter dois impulsos tem bandas laterais mais baixas.
+
+%%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=pskfskespectro.eps,width=8cm}}
+\caption{\label{fig:pskfskspectro}Parte positiva do espectro dos sinais PSK e FSK para $r=1$ sem mostrar os impulsos.}
+\end{figure}
+%%*******************

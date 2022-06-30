@@ -1,0 +1,360 @@
+\chapter{Unidade Logarítmica}
+
+Medir uma grandeza é um processo de comparação com outra
+grandeza da mesma natureza e que serve de referência,
+chamada de unidade.
+
+É importante escolhermos unidades coerentes com o que desejamos medir,
+por exemplo, para medir uma estrada usamos $Km$ e não centímetros, em
+contrapartida um pedaço de tecido é medido em $cm$ e não em $Km$.
+ 
+A medida de potência de sinais elétricos que mais se adapta para telecomunicações
+é $mW$.
+Acontece que mesmo o $mW$ pode não ser conveniente, por exemplo,
+a potência sonora de uma pessoa pode variar 10.000 para 1 e
+em casos extremos, esta mesma pessoa gritando, pode-se chegar a
+variações ded 10.000.000 para 1.
+
+Pessoa falando baixo: 0,001$\mu W$, pessoa falando normal: 10$\mu W$. Essa escala
+imensa torna pouco prática qualquer medida decimal, problema que pode
+ser resolvido pelo uso de logaritmos.
+Por exemplo, uma variação de 1 para 10.000.000 usando logaritmos
+decimais representa uma variação de 0 para 7. Nas próximas seções
+usaremos o logaritmo para definir medidas de potência relativa, que
+serão denominadas de decibéis.
+
+\section{Potência Relativa}
+
+Seja o sistema da Figura~\ref{fig:sistP1P2}, se $P1$ é a potência de
+entrada e $P2$ a potência de saída, então o ganho $G$ em decibéis (dB) será
+\[
+G = 10\log\frac{P2}{P1} dB \text{    quando   } P2>P1
+\]
+caso contrário ($P1>P2$), ocorre uma perda que é denominada de atenuação ($A$) que em decibéis será
+\[
+A = 10\log_{10}\frac{P1}{P2}dB
+\]
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/sistP1P2.eps,width=4cm}}
+\caption{\label{fig:sistP1P2}Sistema com potência de entrada P1 e de saída P2.}
+\end{figure}
+%*******************
+
+
+\begin{exercicio} Determine os ganhos em dB para as seguintes razões
+a) 1, b) 2, c) 10, d) 20 e e) 100.
+\end{exercicio}
+
+\begin{exemplo} Numa linha de transmissão é enviado um sinal de 200$mW$. Na outra
+ponta é rececbido um sinal de 5$mW$. Qual a atenuação em $dB$?
+\end{exemplo}
+
+\subsubsection{Solução}
+
+\[
+A = 10\log\frac{P1}{P2} = 10\log_{10}\frac{200}{5} = 16dB
+\]
+
+\begin{exemplo} Um amplificador tem uma resistência de entrada de 600$\Omega$ e uma 
+resistência de carga de 75$\Omega$. Quando a tensão de entrada é de 100$mV$ rms a 
+corrente de saída é 20$mA$ rms. Ache o ganho em $dB$.
+\end{exemplo}
+
+\subsubsection{Solução}
+
+\[
+P1 = (100\times 10^{-3})^{2}/600 \approx 16,7\mu W
+\]
+\[
+P2 = (20\times 10^{-3})^{2}\times 75 = 30\mu W.
+\]
+e
+\[
+G = 10\log\frac{P2}{P1} = 10\log\frac{3\times 10^{-3}}{16,7\times 10^{-6}} \approx 32,6dB
+\]
+
+Se a entrada e a saída do sistema tem a mesma impedância, então
+\[
+G = 10\log\frac{P2}{P1} = 10\log\frac{V_{2}^{2}/R}{V_{1}^{2}/R} = 20\log\frac{V_2}{V_1} dB
+\]
+ou
+\[
+G = 20\log\frac{I_2}{I_1} dB
+\]
+
+Outra vantagem do uso da medida logarítmica pode ser vista quando temos vários 
+circuitos em série, como está representado na Figura~\ref{fig:circuitosemserie}.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/circuitosemserie.eps,width=12cm}}
+\caption{\label{fig:circuitosemserie}Circuitos em série.}
+\end{figure}
+%*******************
+
+O ganho em $dB$ de todo o sistema pode ser expresso como
+\begin{eqnarray}
+G &=& 10\log\frac{P_{N+1}}{P_1} = 10\log\left(\frac{P_{N+1}}{P_N}\times 
+\frac{P_{N}}{P_{N-1}}\times ... \frac{P_{2}}{P_1}\right)dB \nonumber \\
+&=& 10\log\frac{P_{N+1}}{P_N} + 10\log\frac{P_{N}}{P_{N-1}} + ... 10\log\frac{P_{2}}{P_1} \nonumber \\
+&=& G_N + G_{N-1} + ... + G_2 + G_1 \nonumber
+\end{eqnarray}
+ou seja, o ganho total do sistema é a soma algébrica dos ganhos individuais em $dB$.
+
+\begin{exemplo} Ao ligarmos em série os circuitos dos exemplos 1 e 2 teremos
+uma atenuação ou ganho?
+\end{exemplo}
+
+\subsubsection*{Solução}
+
+\[
+G= G_2 + G_1 = 32,6 -16 = 16,6dB
+\]
+logo temos um ganho.
+
+O decibel é uma unidade relativa, resulta da comparação entre duas potências. Podemos definir
+uma unidade absoluta se fixarmos uma das potências como referência. Isto é realizado
+considerando $P_1 = 1mW$. Desta forma a potência será dada em $dBm$ ou seja
+\[
+P = 10\log\frac{P_2}{1mW}dBm
+\]
+
+Para sinais de satélite a potência tomada como referência é $P_1 = 1W$ e a potência
+resultante é expressa em $dBW$.
+
+\begin{exemplo} Expresse em $dBm$ os seguintes níveis de potência: (i) 1mW, (ii) 1W,
+(iii) 2mW,  (iv) 100mW.
+\end{exemplo}
+
+\subsubsection*{Solução}
+
+\begin{enumerate}
+\item[(i)] $1mW = 10\log\frac{1mW}{1mW} dBm = 0dBm$
+\item[(ii)] $1W = 10\log\frac{100mW}{1mW} dBm = 30dBm$
+\item[(iii)] $2mW = 10\log\frac{2mW}{1mW} dBm = 3dBm$
+\item[(iv)] $100mW = 10\log\frac{100mW}{1mW} dBm = 20dBm$
+\end{enumerate}
+
+\begin{exemplo} Calcule (i) $2dBm + 2dBm$ e (ii) $2dBm + 2dB$
+\end{exemplo}
+
+\subsubsection*{Solução}
+\begin{enumerate}
+\item[(i)] $2dBm = 10\log\frac{P_1}{1mW} = 10^{0,2}mW \approx 1,6mW$, \\ logo \\
+$2dBm + 2dBm \approx 1,6 + 1,6 = 3,2mW$ e \\ $3,2mW = 10\log 3,2 \approx 5dBm$ assim \\
+$2dBm + 2dBm = 5dBm$
+\item[(ii)] $2dBm + 2dB = 10\log 1,6 + 10\log 1,6 = 20\log 1,6 = 4dBm$
+
+Aqui vale observar que a potência de entrada $P_1$ , o ganho $g$ e a potência de saída $P_2$ de um sistema estão relacionados por
+\[
+P_2 = gP_1
+\]
+logo podemos fazer $P_2/1mW = gP_1/1mW$ e aplicando o logaritmo e multiplicando por 10 ambos os lados obtem-se
+\[
+P_2(dBm) = g(dB) + P_1(dBm)
+\]
+logo pode-se somar dB com dBm diretamente.
+\end{enumerate}
+
+Num sistema de transmissão podemos tomar como referência qualquer
+uma de suas potências, e as medições logarítmicas tomadas a partir da potência de referência
+são expressas em $dBr$.
+
+A potência no ponto de referência do sistema é
+\[
+10\log\frac{P_r}{P_r} = 0dBr
+\]
+e esse ponto é chamado ponto de nível relativo zero.
+
+\begin{exemplo}
+Na linha de transmissão representada na Figura~\ref{figex6dB} foi injetado um tom de teste que tem uma
+potência de $-5dBm$  no ponto de $0dBr$. Qual o nível de tom nos diversos
+pontos do sistema.
+\end{exemplo}
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/figex6dB.eps,width=10cm}}
+\caption{\label{figex6dB}Linha de transmissão em série.}
+\end{figure}
+%*******************
+
+
+\subsubsection*{Solução}
+
+O ponto $A$ é uma atenuação para $B$, logo:
+
+\begin{itemize}
+\item Ponto $A$ $1dBr$ e $-4dBm$.
+\item No ponto C $3dBr$ e $-2dBm$ (ganho)
+\item No ponto D $-dBr$ e $-9dBm$ (atenuação)
+\item No ponto E $-1dBr$ e $-6dBm$
+\end{itemize}
+
+Muitas vezes num sistema de transmissão junto com a informação
+seguem outros sinais para ajudar na recuperação dessa informação
+no receptor (por exemplo, sinais de sincronismo, frequência piloto).
+
+Em geral esses sinais são medidos em relação à potência do sinal de
+informação no ponto de referência zero (0 dBr). Essa nova medida é chamada
+de $dBm0 = dBm - dBr$.
+
+\begin{exemplo} O Sinal piloto tem $-20dBm0$ no sistema de transmissão da Figura~\ref{figex6dB}.
+Qual a potência absoluta nos diversos pontos do sistema para este sinal ?
+\end{exemplo}
+
+\subsubsection*{Solução}
+
+Começando pelo ponto $B$ temos que o sinal piloto tem $-20dBm0$
+\begin{itemize}
+\item B: $0dBr$, $-20dBm0$ $\rightarrow$ $-20dBm$ por definição
+\item A: $1dBr$, $-19dBm$ $\rightarrow$ $-20dBm0$
+\item C: $3dBr$, $-17dBm$ $\rightarrow$ $-20dBm0$
+\item D: $-4dBr$, $-24dBm$ $\rightarrow$ $-20dBm0$
+\item E: $-7dBr$, $-27dBm$ $\rightarrow$ $-20dBm0$
+\end{itemize}
+
+\section{Perdas na transmissão e repetidores}
+
+Qualquer meio de transmissão tem uma perda de potência, assim $P_{saida} < P_{entrada}$, e essa perda é chamada de atenuação, dada por
+\[
+L = \frac{P_{entrada}}{P_{saida}}
+\]
+ou em dB
+\[
+L_{dB} = 10\log_{10}\frac{P_{entrada}}{P_{saida}}
+\]
+
+No caso de linhas de transmissão, cabos coaxiais e fibras ópticas e ondas guiadas a potência de saída decai exponencialmente com a distância, ou seja
+\[
+P_{saida} = 10^{-\alpha l/10}P_{entrada}
+\]
+sendo $l$ a distância entre o transmisor e o receptor e $\alpha$ o coeficiente de atenuação dado em dB por unidade de comprimento, em dB tem-se
+\[
+L_{dB} = 10\log_{10}\frac{P_{entrada}}{P_{saida}} = 10\log_{10}\frac{1}{10^{-\alpha l/10}} = \alpha l
+\]
+
+A medida que a distância aumenta a atenuação aumenta, portanto, dependendo da distância faz-se necessário colocar amplificador ao longo do caminho para garantir um determinada potência mínima de saída.
+
+\begin{exemplo} \label{exemplo:perdas} Um cabo de par trançado, utilizado para transmitir um sinal na frequência de 10kHz tem $\alpha = 2$dB/Km. Considere que o transmissor e o receptor estão separados por 2Km e que a potência de entrada é de 10W. É necessário colocar repetidores nessa linha para garantir uma potência de 1W no receptor?
+
+Inicialmente vamos calcular a perda para esse enlace, temos que
+\[
+L = \alpha l = 2 \frac{dB}{Km} 2Km = 4dB.
+\]
+logo
+\[
+P_{saida} = 10^{10^{-L/10}}P_{entrada} = 10^{-0.4}*10W = 4W 
+\]
+e essa transmissão não necessitaria de repetidores.
+\end{exemplo}
+
+\begin{exercicio} Repita o exemplo anterior e caso seja necessário o uso de repetidores indique qual a melhor distância para colocá-los para
+\begin{itemize}
+\item $\alpha = 3$dB/Km -- par trançado a 100KHz
+\item $\alpha = 6$dB/Km -- par trançado a 300KHz
+\end{itemize}
+\end{exercicio}
+
+\begin{exercicio} No Exemplo~\ref{exemplo:perdas} se utilizássemos fibra óptica na frequência de $3.6\times 10^{14}Hz$ que tem $\alpha = 0.2$dB/Km, em qual distância máxima o transmissor e o receptor poderiam ser colocados para que as potência de entrada e saída sejam as mesmas sem que seja necessário utilizar um repetidor.
+\end{exercicio}
+
+\begin{exercicio} O que representa uma perda de 3dB em termos de diminuição na potência de entrada. 
+\end{exercicio}
+
+\begin{exercicio} Considerando a resposta do ítem anterior, o que representa um perda de $n$dB sendo $n$ um múltiplo de 3?
+\end{exercicio}
+
+\section{Transmissão de Rádio}
+
+As transmissões normalmente podem ser feitas via cabos ou pelo espaço livre (chamada de transmissão via rádio).
+Quando a transmissão é feita via cabos e a distância entre o transmissor e o receptor é grande, normalmente o sinal enviado tem que ser regenerado 
+via repetidores no meio do caminho. Transmissão via rádio pode reduzir o número de repetidores e eliminar a 
+necessidade de cabos longos. Vamos examinar as perdas na transmissão
+para propagação com visada direta (aquela em que o sinal enviado pela antena transmissora atinja a antena receptora sem a necessidade de um repetidor), como mostrado na Figura~\ref{transmradio1}. Este método
+de propagação é empregado para longas distâncias utilizando frequências
+acima de 100MHZ.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/transmradio1.eps,width=10cm}}
+\caption{\label{transmradio1}Transmissão no espaço livre.}
+\end{figure}
+%*******************
+
+
+A perda no espaço livre é devida à dispersão esférica da onda de
+rádio e é dada por
+\[
+L = \left(\frac{4\pi l}{\lambda}\right)^{2} = \left(\frac{4\pi f l}{c}\right)^{2}
+\]
+sendo $\lambda$ o comprimento de onda, $f$ a frequência do sinal e $c$ a velocidade 
+da luz.
+
+Se $l$ for expresso em $Km$ e $f$ em Giga Hertz ($10^9 Hz$) então
+\[
+L_{dB} = 92,4 + 20\log f_{GHz} + 20\log l_{Km}
+\]
+
+Note que as perdas crescem com o logarítmo de $l$, assim dobrar a distância implica em aumentar as 
+perdas em $6dB$.
+
+As antenas direcionais tem um efeito de foco que funciona como um amplificador
+de forma que 
+\[
+P_{out} = \frac{g_{T}g{R}}{L}P_{in}
+\]
+sendo $g_{T}$ e $g{R}$ os ganhos das antenas no transmissor e no receptor 
+respectivamente.
+
+Estes ganhos dependem da área de abertura efetiva $A_e$ da antena,
+\[
+g = \frac{4\pi A_e}{\lambda^2} = \frac{4\pi A_{e}f^{2}}{c^2}
+\]
+
+O valor da área efetiva de uma antena corneta, o prato, é aproximadamente
+igual a sua área física, parabólicas podem ter ganhos de até $60dB$.
+
+\begin{exemplo} Seja o sistema de retransmissão por satélite, mostrado na 
+Figura~\ref{transmradio2}. O satélite está a aproximadamente $40.000Km$ de cada
+estação terrestre, o sinal a ser retransmitido tem frequência de $6GHz$.
+As antenas terrestres tem os ganhos de $g_{Tv} = 70dB$ para o 
+enlace de subida e de $g_{Rd} = 50dB$ para o enlace de
+descida. No satélite a antena receptora tem 
+$g_{Ru} = 30dB$ e $g_{Td} = 30dB$. O amplificador no satélite dá um
+ganho de $g_{amp} = 80dB$ e a potência de entrada $P_{in} = 100W = 50dBm$.
+Calcule as perdas e a potência de saída $P_{out}$
+\end{exemplo}
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/transmradio2.eps,width=10cm}}
+\caption{\label{transmradio2}Enlace de satélite.}
+\end{figure}
+%*******************
+
+
+\subsubsection*{Solução}
+
+Temos que $L_{dB} = 92,4 + 20\log f_{GHz} + 20\log l_{Km}$
+representando a perda no espaço livre, as perdas nos enlaces são 
+iguais e dadas por 
+\[
+L_u = L_d = 92,4 + 20\log 6 + 20\log40.000 = 200dB
+\]
+assim a perda total é dada por
+\begin{eqnarray}
+L &=& -g_{Tu} + L_{u} - g_{Ru} - g_{amp} - g_{Td} + L_d - g_{Rd} \nonumber \\
+&=& -70 + 200 -30 - 80 - 30 +200 - 50 = 140dB \nonumber
+\end{eqnarray}
+\[
+P_{out} = -L + P_{in}(dBm) = -140 + 50dBm - 140dB
+\]
+e
+\[
+P_{out} = 10^{-90/10}\times 1mW = 10^{-9}mW
+\]
+Esses valores são típicos de satélite.
+

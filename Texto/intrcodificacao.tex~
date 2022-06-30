@@ -1,0 +1,162 @@
+\chapter{Introdução a Codificação}
+
+Na transmissão digital os erros implicam em troca ou perda de bits. Uma forma de evitar esses erros é codificar a informação para que seja possível detectar e corrigir erros na seuquência recebida. Para isso usa-se os códigos controladores de erro que consistem na adição sistemática de bits redundantes que não transportam informação mais tornam possível detectar e até corrigir alguns erros ocorridos durante a transmissão.
+
+Os códigos controladores de erro podem ser divididos em
+\begin{itemize}
+ \item Códigos de Bloco
+  \begin{itemize}
+ \item Solicitação de repetição automática - ARQ ({\em Automatic Repeat Request})
+ \item Correção de erro em avanço - FEC ({\em Forward Errro Correction})
+\end{itemize}
+ \item Código convolucionais
+\end{itemize}
+
+Os métodos ARQ normalmente exigem um canal de retorno entre o receptor e o transmissor, pois ao detectar erro de recepção um sinal é enviado ao transmissor para que ele repita os dados recebidos com erro. Esse método normalmente só detecta erros.
+
+Já o método FEC utiliza a redundância inserida nos dados pelo transmissor para verficar se os dados recebidos estão corretos. Dependendo da quantidade de redundância pode-se além de detectar o erro descobrir onde ele ocorreu e assim corrgi-lo. Entretanto, vale salientar que detectar erros é mais fácil que corrigir, portanto os códigos com o primeiro objetivo somente são mais simples do que os códigos que se propõem a corrigir erros.
+
+Neste texto nos determos aos códigos FEC, deixaremos a descrição e análise dos ARQs para outra oportunidade.
+
+Como exemplo considere o ISBN ({\em International Standard Book Number}) que consiste num conjunto de 10 caracteres que identifica univocamente um livro. Nesse conjunto de 10 número o último é usado como dígito verificador, ou seja, os números $x_1,\ x_2,\ ...,\ x_10$ são tais que 
+\[
+ \sum_{i=1}^{10}ix_i = 0 (mod\ 11).
+\]
+Como exemplo, o número 0-19-511009-9 (ISBN do Lathi) é válido pois
+\begin{eqnarray}
+&& 1\times 0\ +\ 2\times 1\ + 3\times 9\ +\ 4\times 5\ +\ 5\times 1\ +\ 6\times 1\ +\ 7\times 0\ +\ 8\times 0\ +\ 9\times 9\ +\ 10\times 9  \nonumber \\
+&=& 0+2+27+20+5+6+0+0+81+90 \nonumber \\
+&=& 231 = 0\ (mod\ 11)
+\end{eqnarray}
+
+
+\section{Códigos de Bloco}
+
+De uma forma geral, como está representado na Figura~\ref{fig:canalcodif} os sistemas de comunicações que utilizam codificação podem ser representado por uma fonte, que gera a informação e que a partir desse ponto consideraremos que a saída da fonte já foi amostrada e quantizada, portanto a informação já está em um formato digital. Os bits da fonte serão codificados e em seguida enviados através de um canal de comunicações que devido ao ruído pode inserir erros que consistem incialmente em troca de bits. O receptor utiliza um decodificador que recebe os bits da saída do canal e tenta corrigir os erros inseridos pelo canal. 
+
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/canalcodif.eps,width=8cm}}
+\caption{\label{fig:canalcodif}Representação de um sistema de comunicações que utiliza codificação.}
+\end{figure}
+%*******************
+
+Nesta seção considerarmos que a sequência de símbolos da fonte são agupadas em blocos de tamanho $k$ e que o codificador transforma cada um desses blocos em blocos de tamanho $n$, acrescentando $n-k$ bits de redundância, como está ilustrado na Figura\ref{fig:codigobloco}. Esse tipo de codificação é conhecido como {\bf código de bloco}.
+% e se a fonte gera bits numa taxa de $r$ símbolos/s na saída do codificador a taxa será de $r_c = 4\frac{n}{k}$ símbolos or segundo.
+Um parâmetro importante é a taxa do código definida como
+\[
+ R = \frac{k}{n}
+\]
+pois nos dá uma indicação do quanto de redundância será inserido pelo código.
+
+%*******************
+\begin{figure}[h]
+\centerline{\psfig{figure=./Figuras/codigobloco.eps,width=8cm}}
+\caption{\label{fig:codigobloco}Adição de redundância em um código de bloco.}
+\end{figure}
+%*******************
+
+Observe que as palavras código pertencem a um conjunto de tamanho $2^n$ e que desse conjunto são escolhidas $2^k$ palavras. Essa escolha é feita de modo a minimizar a probabilidade de erro, para isso as palavras escolhidas tem o maior número de bits distintos possível. A menor quantidade em que duas palavras código quaisquer é conhecida como {\bf distância do código}.
+
+Duas palavras de um código com distância mínima $d$ diferem dessa quantidade de bits, logo, se tivermos $t < d/2 -1$ erros podemos corrigir a palavra recebida, logo para corrigir $t$ erros deve-ser ter
+\[
+ d_{min} = 2t +1.
+\]
+Já para detectar $t$ error necessitamos de
+\[
+ d_{min} = t + 1.
+\]
+Portanto, Um código que detecte $t$ erros é mais simples do que um que corrije $t$ erros.
+
+\section{Códigos de Bloco Lineares}
+
+Sejam ${\bf C} = (c_1, c_2, ...,c_n)$ uma palavra código e ${\bf d} = (d_1, d_2, ...,d_k)$ uma palavra de informação, pode-se escrever
+\[
+ {\bf c} = {\bf d}G
+\]
+sendo $G_{k\times n} = [I_{k\times k}: P_{k\times m}]$ sendo $I_{k\times k}$ uma matriz indetidade e $P_{k\times m}$ com $m=n-k$ a matriz de paridade.
+
+\begin{exemplo}
+Seja
+\[
+ G = 
+\left[
+\begin{array}{c c c c c c}
+ 1 & 0 & 0 & 1 & 0 & 1 \\
+0 & 1 & 0 & 0 & 1 & 1\\
+0 & 0 & 1 & 1 & 1 & 1
+\end{array}
+\right]
+\]
+então tem-se
+
+\begin{tabular}{c c}
+ Palava de informação & Palavra código \\
+000 & 000000 \\
+001 & 001110 \\
+010 & 010011 \\
+011 & 011101 \\
+100 & 100101 \\
+101 & 101011 \\
+110 & 110110 \\
+111 & 111000
+\end{tabular}
+
+\end{exemplo}
+
+Observe que em um código linear a soma de duas palavras código ainda é uma palavra código, e que a palvavra código composta de zeros sempre está presente no código.
+
+Para os códigos lineares pode-se construir a matriz 
+\[
+ H = [P^T : I_m]
+\]
+tal que ${\bf c}H^T = 0$. Essa matriz é conhecida com matriz de teste de paridade.
+
+\begin{exemplo}
+ Para o código do exemplo anterior tem-se
+\[
+ H = 
+\left[
+\begin{array}{c c c c c c}
+1 & 0 & 1 & 1 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 & 0 & 1
+\end{array}
+\right]
+\]
+\end{exemplo}
+
+Observe que qualquer palavra que não seja do código, por exemplo ${\bf r} = {\bf c} + {\bf e}$, gera um vetor diferente de zero, ou seja
+\begin{eqnarray}
+ {\bf s} &=& {\bf r}H^T \\
+&=& ({\bf c} + {\bf e})H^T \\
+&=& {\bf c}H^T + {\bf e}H^T \\
+&=& {\bf e}H^T
+\end{eqnarray}
+o vetor ${\bf s}$ é conhecido como {\bf síndrome}.
+ 
+\subsection{Correção de erros usando síndromes}
+
+Considere todos os vetores de erro de peso mínimo e calcule {\bf s} para cada um deles.
+
+\begin{exemplo}
+
+\begin{table}[h]
+\begin{tabular}{c c}
+ Palava de informação & Palavra código \\
+000001 & 001 \\
+000010 & 010 \\
+... & ... \\
+100000 & 101
+\end{tabular}
+\end{table}
+\end{exemplo}
+
+Ao receber um vetor ${\bf r_i}$ calcula-se a síndrome ${\bf s_{i}} = {\bf r_{i}}H^T$ e verifica-se na tabela a qual linha essa síndrome corresponde e encontra-se o erro.
+
+\begin{exemplo}
+ Escrever
+\end{exemplo}
+
+Para um código $(n,k)$ linear tem-se $d_{min} = 1+n-k$ e um código de Hamming tem como característica $(n,k) = (2^m-1,2^m-1-m)$ sendo $m=n-k$.
