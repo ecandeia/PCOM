@@ -118,10 +118,10 @@ class PSK(gr.top_block, Qt.QWidget):
         self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_const_sink_x_0_win)
         self.digital_psk_mod_0 = digital.psk.psk_mod(
-            constellation_points=4,
+            constellation_points=2,
             mod_code="gray",
             differential=True,
-            samples_per_symbol=32,
+            samples_per_symbol=4,
             excess_bw=0.35,
             verbose=False,
             log=False)
