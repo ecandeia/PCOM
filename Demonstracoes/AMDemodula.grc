@@ -1,7 +1,6 @@
 options:
   parameters:
     author: ''
-    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -59,7 +58,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 512.0]
+    coordinate: [72, 244.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0
@@ -81,7 +80,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 128.0]
+    coordinate: [168, 352.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0_0
@@ -103,7 +102,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 312.0]
+    coordinate: [56, 96.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0_0_0
@@ -125,7 +124,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 448.0]
+    coordinate: [456, 232.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -143,7 +142,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 360.0]
+    coordinate: [264, 136.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -161,7 +160,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 232.0]
+    coordinate: [392, 152.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0_0
@@ -179,7 +178,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 320.0]
+    coordinate: [688, 168.0]
     rotation: 0
     state: true
 - name: blocks_throttle_0
@@ -198,7 +197,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 312.0]
+    coordinate: [528, 164.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -217,12 +216,12 @@ blocks:
     samp_rate: samp_rate
     type: fir_filter_fff
     width: '100'
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 96.0]
+    coordinate: [824, 136.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0
@@ -251,7 +250,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 296.0]
+    coordinate: [824, 296.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0_0
@@ -280,7 +279,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 112.0]
+    coordinate: [1048, 152.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -377,16 +376,16 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 72.0]
+    coordinate: [528, 64.0]
     rotation: 0
     state: true
 
 connections:
 - [analog_const_source_x_0, '0', blocks_add_xx_0, '1']
-- [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '0']
+- [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '1']
 - [analog_sig_source_x_0_0, '0', blocks_add_xx_0, '0']
 - [analog_sig_source_x_0_0_0, '0', blocks_multiply_xx_0_0, '1']
-- [blocks_add_xx_0, '0', blocks_multiply_xx_0, '1']
+- [blocks_add_xx_0, '0', blocks_multiply_xx_0, '0']
 - [blocks_multiply_xx_0, '0', blocks_throttle_0, '0']
 - [blocks_multiply_xx_0, '0', qtgui_time_sink_x_0, '0']
 - [blocks_multiply_xx_0_0, '0', low_pass_filter_0, '0']
@@ -396,4 +395,3 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.2.0

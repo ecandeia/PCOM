@@ -1,7 +1,6 @@
 options:
   parameters:
     author: ''
-    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -64,7 +63,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 120.0]
+    coordinate: [48, 120.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0_0
@@ -86,7 +85,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 408.0]
+    coordinate: [40, 352.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0_0_0
@@ -108,7 +107,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 424.0]
+    coordinate: [376, 264.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -126,7 +125,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 280.0]
+    coordinate: [296, 160.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0_0
@@ -144,7 +143,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 296.0]
+    coordinate: [600, 176.0]
     rotation: 0
     state: true
 - name: blocks_throttle_0
@@ -163,7 +162,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [400, 288.0]
+    coordinate: [408, 172.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -182,12 +181,12 @@ blocks:
     samp_rate: samp_rate
     type: fir_filter_fff
     width: '100'
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [712, 72.0]
+    coordinate: [776, 144.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0
@@ -202,7 +201,7 @@ blocks:
     gui_hint: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: '"Antes do filtro"'
     plotconst: 'True'
     plotfreq: 'True'
     plottime: 'True'
@@ -211,12 +210,12 @@ blocks:
     showports: 'False'
     showrf: 'False'
     type: float
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [888, 272.0]
+    coordinate: [744, 336.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0_0
@@ -231,7 +230,7 @@ blocks:
     gui_hint: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: '"Sinal recuperado"'
     plotconst: 'True'
     plotfreq: 'True'
     plottime: 'True'
@@ -240,12 +239,12 @@ blocks:
     showports: 'False'
     showrf: 'False'
     type: float
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [888, 88.0]
+    coordinate: [984, 160.0]
     rotation: 0
     state: true
 
@@ -261,4 +260,3 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.2.0
